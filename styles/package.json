@@ -1,0 +1,17 @@
+{
+  "name": "mapbox-gl-styles",
+  "version": "0.0.1",
+  "description": "mapbox gl example styles",
+  "main": "index.js",
+  "bin": {},
+  "scripts": {
+    "test": "gl-style-validate styles/*-v7.json",
+    "migrate": "for style in styles/*-v7.json; do gl-style-migrate $style | sponge $style; done",
+    "build": "node -e 'require(\"fs\").writeFileSync(\"index.json\", JSON.stringify(require(\"./\"), null, 2))'"
+  },
+  "devDependencies": {
+    "mapbox-gl-style-spec": "^7.3.0",
+    "sponge": "^0.1.0"
+  },
+  "license": "ISC"
+}

@@ -1,0 +1,26 @@
+{
+    "literal": {
+        "zoom": 16,
+        "center": [52.499167, 13.418056],
+        "height": 256,
+        "classes": ["literal"]
+    },
+    "constant": {
+        "zoom": 16,
+        "center": [52.499167, 13.418056],
+        "height": 256,
+        "classes": ["constant"]
+    },
+    "function-close": {
+        "zoom": 14,
+        "center": [52.499167, 13.418056],
+        "height": 256,
+        "classes": ["function-close"]
+    },
+    "function-far": {
+        "zoom": 15,
+        "center": [52.499167, 13.418056],
+        "height": 256,
+        "classes": ["function-far"]
+    }
+}

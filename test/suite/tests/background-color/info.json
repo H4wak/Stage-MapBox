@@ -1,0 +1,29 @@
+{
+    "default": {
+        "center": [0, 0],
+        "zoom": 0,
+        "width": 64,
+        "height": 64
+    },
+    "literal": {
+        "center": [0, 0],
+        "zoom": 0,
+        "width": 64,
+        "height": 64,
+        "classes": ["literal"]
+    },
+    "constant": {
+        "center": [0, 0],
+        "zoom": 0,
+        "width": 64,
+        "height": 64,
+        "classes": ["constant"]
+    },
+    "function": {
+        "center": [0, 0],
+        "zoom": 0,
+        "width": 64,
+        "height": 64,
+        "classes": ["function"]
+    }
+}

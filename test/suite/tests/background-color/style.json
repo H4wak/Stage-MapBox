@@ -1,0 +1,28 @@
+{
+  "version": 7,
+  "constants": {
+    "@green": "green"
+  },
+  "sources": {
+    "mapbox": {
+      "type": "vector",
+      "maxzoom": 14,
+      "tiles": ["local://tiles/{z}-{x}-{y}.vector.pbf"]
+    }
+  },
+  "layers": [{
+    "id": "background",
+    "type": "background",
+    "paint.literal": {
+      "background-color": "red"
+    },
+    "paint.constant": {
+      "background-color": "@green"
+    },
+    "paint.function": {
+      "background-color": {
+        "stops": [[0, "blue"], [10, "white"]]
+      }
+    }
+  }]
+}

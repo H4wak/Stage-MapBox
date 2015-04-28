@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+
+MASON_COMMAND=$1 ; shift
+MASON_NAME=$1 ; shift
+MASON_VERSION=$1 ; shift
+
+set -e
+set -o pipefail
+
+function usage {
+    echo "Usage: $0 <command> <lib> <version>"
+}
+
+if [ -z "${MASON_COMMAND}" ]; then
+    usage
+    exit 1
+fi
+
+ROOTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+MASON_DIR=${MASON_DIR:-$ROOTDIR}
+
+if [ "${MASON_COMMAND}" = "selfupdate" ]; then
+    cd ~/.mason
+    git pull origin master
+    exit
+elif [ "${MASON_COMMAND}" = "init" ]; then
+    MASON_DIR_NAME=`basename $(pwd)`
+    MASON_SLUG=`read -p "Package name [${MASON_DIR_NAME}]: "`
+    if [ -z "${MASON_SLUG}" ]; then MASON_SLUG="${MASON_DIR_NAME}"; fi
+    git init
+    git checkout -b ${MASON_SLUG}
+    git add script.sh
+    git add .travis.yml
+    git commit -m "initial version of ${MASON_SLUG}"
+    git remote add origin git@github.com:mapbox/mason.git || git remote set-url origin git@github.com:mapbox/mason.git
+    git push --set-upstream origin ${MASON_SLUG}
+    exit
+elif [ "${MASON_COMMAND}" = "env" ]; then
+    . ${MASON_DIR}/mason.sh > /dev/null
+    eval echo \$${MASON_NAME}
+    exit
+fi
+
+if [ -z "${MASON_NAME}" ]; then
+    usage
+    echo "Missing <lib>"
+    exit 1
+elif [ -z "${MASON_VERSION}" ]; then
+    usage
+    echo "Missing <version>"
+    exit 1
+fi
+
+. ${MASON_DIR}/mason.sh
+
+
+# Load script if it doesn't exist yet
+MASON_SCRIPT="${MASON_ROOT}/.scripts/${MASON_SLUG}.sh"
+
+if [ ! -f "${MASON_SCRIPT}" ]; then
+    mason_step "Loading install script 'https://github.com/mapbox/mason/blob/${MASON_SLUG}/script.sh'..."
+    mkdir -p "${MASON_ROOT}/.scripts"
+    curl --retry 3 -s -f -# -L \
+      https://raw.githubusercontent.com/mapbox/mason/${MASON_SLUG}/script.sh \
+      -o "${MASON_ROOT}/.scripts/${MASON_SLUG}.sh" || (mason_error "Could not find install script for ${MASON_SLUG}" && exit 1)
+fi
+
+bash "${MASON_SCRIPT}" "${MASON_COMMAND}" "$@"
